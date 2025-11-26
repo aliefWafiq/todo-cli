@@ -2,6 +2,7 @@ from pathlib import Path
 from typing import Optional, List
 import typer
 from rptodo import __app_name__, __version__
+import pyfiglet
 
 from rptodo import ERRORS, __app_name__, __version__, config, database, rptodo
 
@@ -173,6 +174,13 @@ def remove_all(
             typer.secho("All to-dos were removed", fg=typer.colors.GREEN)
     else:
         typer.secho("Operation canceled")
+
+@app.command(name="menu")
+def menu() -> None:
+    banner = pyfiglet.figlet_format("RpTodo")
+    typer.secho(banner, fg=typer.colors.BRIGHT_BLUE)
+    print("\n")
+    print("list")
 
 def _version_callback(value: bool) -> None:
     if value:
