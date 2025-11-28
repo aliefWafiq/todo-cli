@@ -3,6 +3,7 @@ from typing import Optional, List
 import typer
 from rptodo import __app_name__, __version__
 import pyfiglet
+import shlex
 
 from rptodo import ERRORS, __app_name__, __version__, config, database, rptodo
 
@@ -177,10 +178,29 @@ def remove_all(
 
 @app.command(name="menu")
 def menu() -> None:
-    banner = pyfiglet.figlet_format("RpTodo")
-    typer.secho(banner, fg=typer.colors.BRIGHT_BLUE)
-    print("\n")
-    print("list")
+    while True:
+        banner = pyfiglet.figlet_format("RpTodo")
+        typer.secho(banner, fg=typer.colors.BRIGHT_BLUE)
+        typer.secho(
+            "list menu:\n"
+            "- list\n"
+            "- add <description> --priority <1-3>\n"
+            "- complete <TODO_ID>\n" \
+            "- remove <TODO_ID>\n"
+            "- clear\n"
+            "- exit\n"
+        )
+        option = input("RpTodo > ")
+    
+        if option.strip() == "exit":
+            typer.secho("Bye!", fg=typer.colors.BRIGHT_BLUE)
+            break
+
+        try:
+            args = shlex.split(option)
+            app(args, standalone_mode=False)
+        except Exception as e:
+            typer.secho(f"Error: {e}", fg=typer.colors.RED)
 
 def _version_callback(value: bool) -> None:
     if value:
